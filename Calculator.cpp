@@ -44,6 +44,11 @@ void Calculator::getFormat() {
                 stdInfix.insert(i, 1, '0');
             }
         }
+        if (stdInfix[i] == '|') {
+            if (stdInfix[i+1] == '-' || stdInfix[i+1] == '+') {				//-x转换为0-x，+x转化为0+x
+                stdInfix.insert(i+1,1,'0');
+            }
+        }
     }
 }
 
@@ -102,8 +107,7 @@ void Calculator::getPostfix() {
                 if (absNumeber == ABS_ODD) {
                     symStack.push(stdInfix[i]);
                     absNumeber = ABS_EVEN;
-                }
-                else{
+                } else {
                     while (!symStack.empty() && symStack.top() != '|') {
                         tmp += symStack.top();
                         postfix.push_back(tmp);
@@ -291,6 +295,8 @@ void Calculator::calResult() {
     if (!figStack.empty()) {
         result = figStack.top();
     }
+    postfix.clear(); // 清空后缀字符串
+    stack<double>().swap(figStack); // 清空数字符号栈
 }
 
 //计算方法
